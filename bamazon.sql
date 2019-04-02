@@ -13,17 +13,10 @@ CREATE TABLE products (
   PRIMARY KEY (item_id)
 );
 
-INSERT INTO songs (title, artist, genre)
+INSERT INTO products
+  ( product_name, department_name, price, stock_quantity )
 VALUES
-  ('Human', 'Krewella', 'Dance'), 
-  ('TRNDSTTR', 'Black Coast', 'Dance'), 
-  ("Yellow Submarine", "The Beatles", "Classic Rock"),
-  ("Who's Next", "The Who", "Classic Rock");
-
-
-  INSERT INTO products
-  ( flavor, price, quantity )
-VALUES
-  ('strawberry', 3.25, 75), 
-  ('chcolate', 3.10, 120), 
-  ('vanilla', 2.50, 100);
+  ('Messages from Goldilocks', 'General Goods', .99, 1000 ), 
+  ('Normalize', 'Diplomatic Words', .01, 9999 ), 
+  ('Udemy Javascript Course 2019', 'Education', 12.99, 100);
+  ('Udemy Fullstack Course 2019', 'Education', 12.99, 100);
