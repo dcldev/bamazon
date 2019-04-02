@@ -18,5 +18,7 @@ INSERT INTO products
 VALUES
   ('Messages from Goldilocks', 'General Goods', .99, 1000 ), 
   ('Normalize', 'Diplomatic Words', .01, 9999 ), 
-  ('Udemy Javascript Course 2019', 'Education', 12.99, 100);
-  ('Udemy Fullstack Course 2019', 'Education', 12.99, 100);
+  ('Udemy Javascript Course 2019', 'Education', 12.99, 100),
+  ('Udemy Fullstack Course 2019', 'Education', 12.99, 100),
+  ('Hours Spent Studying', 'Education', 100000000, 20),
+  ('Columbia Boot Camp by Trilogy', 'Education', 12000, 5);
