@@ -19,14 +19,31 @@ server.listen(3306, '127.0.0.1', () => {
     console.log('Listening for requests');
 })
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     //run BamazonSearch function goes here
 });
 
-function bamazonCustomerSearch () {
-    prompt([
-        
-    ])
-}
+function displayStoreFront() {
+    inquirer
+    .prompt({
+        name: "action",
+        type: "list",
+        message: "Welcome to Bamazon! Check out our wares!",
+        choices: [
+          "General",
+          "Education",
+          "Diplomatic Words",
+          "Other",
+          "EXIT"
+        ]
+    })
+    .then(answers => {
+        switch (answers.action) {
+            case "General":
+                //display general items function
+        }
+
+      }
+    )}
