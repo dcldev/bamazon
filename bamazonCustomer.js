@@ -1,6 +1,5 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-let colors = require("colors/safe");
 let fancyTable = require("cli-table");
 
 let connection = mysql.createConnection({
@@ -87,10 +86,7 @@ function yourMoveKimosabe() {
             message: "Enter the QUANTITY of the AMOUNT you want to PURCHASE:",
             min: 1,
             }
-        ])
-        .then( answer => {
-        }
-        )
+        ]);
     };
 
 // products.forEach((product, i) => {
@@ -122,5 +118,3 @@ function yourMoveKimosabe() {
 //             console.log(res);
 //             drawTable.push(res:[{product_name, department_name, price, stock_quantity}]);
 //             console.log(drawTable.toString());
-
-//         })
