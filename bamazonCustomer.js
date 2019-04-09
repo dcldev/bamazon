@@ -14,7 +14,8 @@ let connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    //run BamazonSearch function goes here
+    let drawHeader = new fancyTable ({head: ["BAMAZON"]});
+    console.log(drawHeader.toString());
     begin();
 });
 
@@ -25,7 +26,9 @@ function begin() {
             if (err) {
                 console.log("There has been an error unable to gather products");
             }
+            
             products = res;
+            
             promptCustomer();
         });
 }
