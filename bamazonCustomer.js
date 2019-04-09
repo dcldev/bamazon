@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 const http = require("http");
+let fancyTable = require("cli-table");
 
 let connection = mysql.createConnection({
     host: "localhost",
@@ -10,40 +11,95 @@ let connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-
-const server = http.createServer((req, res) => {
-    console.log('Someone accessed my server!');
-});
-
-server.listen(3306, '127.0.0.1', () => {
-    console.log('Listening for requests');
-})
-
+//Connecting to mySQL database
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     //run BamazonSearch function goes here
+    begin();
 });
 
-function displayStoreFront() {
-    inquirer
-    .prompt({
-        name: "action",
-        type: "list",
-        message: "Welcome to Bamazon! Check out our wares!",
-        choices: [
-          "General",
-          "Education",
-          "Diplomatic Words",
-          "Other",
-          "EXIT"
-        ]
-    })
-    .then(answers => {
-        switch (answers.action) {
-            case "General":
-                //display general items function
-        }
+function begin() {
+    let query = "SELECT * from products";
+    connection.query(query,
+        function (err, res) {
+            if (err) {
+                console.log("There has been an error unable to gather products");
+            }
+            products = res;
+            promptCustomer();
+        });
+}
 
-      }
-    )}
+function promptCustomer() {
+    inquirer
+        .prompt({
+            name: "action",
+            type: "list",
+            message: "Welcome to Bamazon! What would you like to do?",
+            choices: [
+                "PURCHASE AN ITEM",
+                "EXIT"
+            ]
+        })
+        .then(answers => {
+            switch (answers.action) {
+                case "PURCHASE AN ITEM":
+                    displayTable(products);
+                    // beginOrder();
+                    break;
+            }
+
+        })
+}
+
+
+function displayTable() {
+    let query = connection.query("SELECT * from products", function (err, res) {
+    let drawTable = new fancyTable({
+        head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "QTY"]
+    });
+
+    for (var i = 0; i < res.length; i++){
+        drawTable.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity])
+    }
+
+    console.log(drawTable.toString());
+
+})
+
+}
+
+
+    // products.forEach((product, i) => {
+    //     console.log(i === product.length);
+    //       drawTable.push([product.item_id, product.product_name, product.department_name, product.price, product.stock_quantity]);
+    //       console.log(drawTable.toString());
+    //     });
+    //   });
+    // };
+
+    // products.forEach((product) => {
+    //     product.sizes.forEach((size) => {
+    //       console.log(size);
+    //     });
+    //   });
+    
+
+    // connection.query(query,
+    //         function (err, res) {
+    //         products.forEach(function(res, i)
+            
+
+
+    //         }
+    //         for (var i = 0; i < res.length; i++)
+    //             if (err) {
+    //                 console.log("There has been an error unable to gather products");
+    //             }
+    //             console.log(res);
+    //             drawTable.push(res:[{product_name, department_name, price, stock_quantity}]);
+    //             console.log(drawTable.toString());
+                
+    //         })
+            
