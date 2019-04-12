@@ -14,7 +14,9 @@ let connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    let drawHeader = new fancyTable ({head: ["BAMAZON"]});
+    let drawHeader = new fancyTable({
+        head: ["BAMAZON"]
+    });
     console.log(drawHeader.toString());
     begin();
 });
@@ -26,9 +28,8 @@ function begin() {
             if (err) {
                 console.log("There has been an error unable to gather products");
             }
-            
             products = res;
-            
+
             promptCustomer();
         });
 }
@@ -78,46 +79,59 @@ function displayTable() {
 function yourMoveKimosabe() {
     inquirer
         .prompt([{
-            name: "item",
-            type: "number",
-            message: "Enter the ITEM ID for the ITEM you want to PURCHASE:",
-            min: 1
-        },
+                name: "userInputID",
+                type: "number",
+                message: "Enter the ITEM ID for the ITEM you want to PURCHASE:",
+                min: 1
+            },
             {
-            name: "quantity",
-            type: "number",
-            message: "Enter the QUANTITY of the AMOUNT you want to PURCHASE:",
-            min: 1,
+                name: "userInputQty",
+                type: "number",
+                message: "Enter the QUANTITY of the AMOUNT you want to PURCHASE:",
+                min: 1,
             }
-        ]);
-    };
+        ]).then(answer => {
+            let userInputID = answer.userInputID;
+            let userInputQty = answer.userInputQty;
 
-// products.forEach((product, i) => {
-//     console.log(i === product.length);
-//       drawTable.push([product.item_id, product.product_name, product.department_name, product.price, product.stock_quantity]);
-//       console.log(drawTable.toString());
-//     });
-//   });
-// };
+            //run function to display products
+            displayCustomerProd(userInputID, userInputQty);
+        });
+}
 
-// products.forEach((product) => {
-//     product.sizes.forEach((size) => {
-//       console.log(size);
-//     });
-//   });
+function displayCustomerProd(userInputID, userInputQty) {
+    connection.query(' SELECT * FROM products', (err, res) => {
+        if (err) throw err;
+        // console.log(res);
+        let pullProduct;
 
+        for (let i = 0; i < res.length; i++) {
+            if (res[i].item_id == userInputID) {
+                pullProduct = res[i];
+            }
+        }
 
-// connection.query(query,
-//         function (err, res) {
-//         products.forEach(function(res, i)
+        if (pullProduct.stock_quantity >= userInputQty) {
+            fullFillOrder(pullProduct, userInputID, userInputQty);
+            connection.end();
+        } else {
+            let drawOutOfStock = new fancyTable({
+                head: ["SORRY, WE ARE UNABLE TO FULLFILL YOUR DESIRED ORDER DUE TO LACK OF STOCK."]
+            });
+            console.log(drawOutOfStock.toString());
+        }
+    })
+};
 
+let fullFillOrder = (pullProduct, userInputID, userInputQty) => {
+    let updateQty = pullProduct.stock_quantity - userInputQty;
+    let orderTot = pullProduct.price * userInputID;
+    let queryMain = "UPDATE products SET stock_quanity = ? where ?";
+    let queryDeuce = "UPDATE products SET product_sales = ? where ?";
 
+    connection.query(queryMain, [updateQty,{item_id: userInputID}], (err, res) => {});
 
-//         }
-//         for (var i = 0; i < res.length; i++)
-//             if (err) {
-//                 console.log("There has been an error unable to gather products");
-//             }
-//             console.log(res);
-//             drawTable.push(res:[{product_name, department_name, price, stock_quantity}]);
-//             console.log(drawTable.toString());
+    connection.query(queryDeuce, [orderTot, {item_id: userInputID}], (err, res) => {});
+
+    console.log({orderTot});
+}
