@@ -149,8 +149,9 @@ let fullFillOrder = (pullProduct, userInputID, userInputQty) => {
         item_id: userInputID
     }], (err, res) => {});
 
-
-    console.log({
-        orderTot
+    let checkoutComplete = new fancyTable({
+        head: ["Congratulations on placing your order!" + " Your Total Was: " + "$ " + orderTot]
     });
+    console.log(checkoutComplete.toString());
+
 }
