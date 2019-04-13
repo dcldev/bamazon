@@ -108,6 +108,17 @@ function displayCustomerProd(userInputID, userInputQty) {
         for (let i = 0; i < res.length; i++) {
             if (res[i].item_id == userInputID) {
                 pullProduct = res[i];
+
+                let drawCart = new fancyTable({
+                    head: ["ID", "PRODUCT NAME", "PRICE", "YOUR ITEM QTY"]
+                });
+
+                {
+                    drawCart.push([pullProduct.item_id, pullProduct.product_name, pullProduct.price, userInputQty])
+                }
+
+                console.log(drawCart.toString());
+    
             }
         }
 
@@ -123,15 +134,23 @@ function displayCustomerProd(userInputID, userInputQty) {
     })
 };
 
+
 let fullFillOrder = (pullProduct, userInputID, userInputQty) => {
     let updateQty = pullProduct.stock_quantity - userInputQty;
     let orderTot = pullProduct.price * userInputID;
     let queryMain = "UPDATE products SET stock_quanity = ? where ?";
     let queryDeuce = "UPDATE products SET product_sales = ? where ?";
 
-    connection.query(queryMain, [updateQty,{item_id: userInputID}], (err, res) => {});
+    connection.query(queryMain, [updateQty, {
+        item_id: userInputID
+    }], (err, res) => {});
 
-    connection.query(queryDeuce, [orderTot, {item_id: userInputID}], (err, res) => {});
+    connection.query(queryDeuce, [orderTot, {
+        item_id: userInputID
+    }], (err, res) => {});
 
-    console.log({orderTot});
+
+    console.log({
+        orderTot
+    });
 }
